@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/router";
 import {
   Button,
@@ -15,29 +15,40 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import axios from "axios";
+import { hasCookie } from "cookies-next";
+
+export async function getServerSideProps({ req, res }) {
+  const isAuthenticated = hasCookie("session", { req, res });
+
+  if (isAuthenticated) {
+    return {
+      redirect: {
+        destination: "/profile",
+        permanent: false,
+      },
+    };
+  }
+}
 
 export default function SignIn() {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
   const router = useRouter();
 
-  const handleLogin = async (e: React.SyntheticEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
+    const credentials = {
+      email,
+      password,
     };
 
-    const credentials = {
-      email: target.email.value,
-      password: target.password.value,
+    const { data } = await axios.post("/api/auth/signIn", credentials);
+
+    if (data) {
+      router.push("/profile");
     }
-
-    const { data } = await axios.post('/api/auth/signIn', credentials);
-
-    if(data){
-      router.push('/profile');
-    }
-
   };
 
   return (
@@ -51,6 +62,7 @@ export default function SignIn() {
               <Input
                 type="email"
                 name="email"
+                onChange={(e) => setEmail(e.target.value)}
               />
             </FormControl>
             <FormControl id="password" mt={4}>
@@ -58,10 +70,16 @@ export default function SignIn() {
               <Input
                 name="password"
                 type="password"
-                
+                onChange={(e) => setPassword(e.target.value)}
               />
             </FormControl>
-            <Button colorScheme={"blue"} variant={"solid"} type="submit" mt={4} w={"full"}>
+            <Button
+              colorScheme={"blue"}
+              variant={"solid"}
+              type="submit"
+              mt={4}
+              w={"full"}
+            >
               Sign in
             </Button>
           </form>

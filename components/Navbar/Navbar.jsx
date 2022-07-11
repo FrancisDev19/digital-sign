@@ -62,6 +62,8 @@ export default function WithSubnavigation({ isAuthenticated }) {
           </Flex>
         </Flex>
         {isAuthenticated ? (
+          <LogoutButton />
+        ) : (
           <Stack
             flex={{ base: 1, md: 0 }}
             justify={"flex-end"}
@@ -91,8 +93,6 @@ export default function WithSubnavigation({ isAuthenticated }) {
               Sign Up
             </Button>
           </Stack>
-        ) : (
-          <LogoutButton />
         )}
         <LanguageSwitcher />
       </Flex>
