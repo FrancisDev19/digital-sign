@@ -16,9 +16,11 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { hasCookie } from "cookies-next";
+import { GetServerSidePropsContext } from "next";
 
-export async function getServerSideProps({ req, res }) {
-  const isAuthenticated = hasCookie("session", { req, res });
+export async function getServerSideProps({req, res}: GetServerSidePropsContext) {
+
+  const isAuthenticated = hasCookie("session", {req, res});
 
   if (isAuthenticated) {
     return {
@@ -31,17 +33,20 @@ export async function getServerSideProps({ req, res }) {
 }
 
 export default function SignIn() {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
 
   const router = useRouter();
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: React.SyntheticEvent) => {
     e.preventDefault();
 
+        const target = e.target as typeof e.target & {
+      email: { value: string };
+      password: { value: string };
+    };
+
     const credentials = {
-      email,
-      password,
+      email: target.email.value,
+      password: target.password.value,
     };
 
     const { data } = await axios.post("/api/auth/signIn", credentials);
@@ -62,7 +67,6 @@ export default function SignIn() {
               <Input
                 type="email"
                 name="email"
-                onChange={(e) => setEmail(e.target.value)}
               />
             </FormControl>
             <FormControl id="password" mt={4}>
@@ -70,7 +74,7 @@ export default function SignIn() {
               <Input
                 name="password"
                 type="password"
-                onChange={(e) => setPassword(e.target.value)}
+                
               />
             </FormControl>
             <Button
