@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import {
   Button,
@@ -16,11 +16,10 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { hasCookie } from "cookies-next";
-import { GetServerSidePropsContext } from "next";
+import { GetServerSideProps } from "next";
 
-export async function getServerSideProps({req, res}: GetServerSidePropsContext) {
-
-  const isAuthenticated = hasCookie("session", {req, res});
+export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+  const isAuthenticated = hasCookie("session", { req, res });
 
   if (isAuthenticated) {
     return {
@@ -30,6 +29,12 @@ export async function getServerSideProps({req, res}: GetServerSidePropsContext) 
       },
     };
   }
+
+  return {
+      props: {
+        
+      },
+    };
 }
 
 export default function SignIn() {
@@ -103,3 +108,4 @@ export default function SignIn() {
     </Stack>
   );
 }
+
