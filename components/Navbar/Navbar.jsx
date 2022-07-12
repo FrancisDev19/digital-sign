@@ -85,7 +85,7 @@ export default function WithSubnavigation({ isAuthenticated }) {
               fontWeight={600}
               color={"white"}
               bg={"pink.400"}
-              href={"/register"}
+              href={"/signup"}
               _hover={{
                 bg: "pink.300",
               }}
