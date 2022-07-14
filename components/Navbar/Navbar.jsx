@@ -24,10 +24,14 @@ import {
 import useTranslation from "next-translate/useTranslation";
 import LanguageSwitcher from "../LanguageSwitcher";
 import LogoutButton from "../LogoutButton";
+import { useContext } from "react";
+import { AuthContext } from "../../context/auth-context";
 
-export default function WithSubnavigation({ isAuthenticated }) {
+export default function WithSubnavigation() {
   const { isOpen, onToggle } = useDisclosure();
   const { t } = useTranslation("common");
+
+  const isUserAuthenticated = useContext(AuthContext);
 
   return (
     <Box>
@@ -61,7 +65,7 @@ export default function WithSubnavigation({ isAuthenticated }) {
             <DesktopNav />
           </Flex>
         </Flex>
-        {isAuthenticated ? (
+        {isUserAuthenticated ? (
           <LogoutButton />
         ) : (
           <Stack

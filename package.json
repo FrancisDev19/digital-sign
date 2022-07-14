@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.8.1",
     "@types/node": "^18.0.0",
     "axios": "^0.27.2",
+    "axios-auth-refresh": "^3.3.1",
     "cookies-next": "^2.1.1",
     "dotenv": "^16.0.1",
     "framer-motion": "^6.3.11",

@@ -18,25 +18,6 @@ import axios from "axios";
 import { hasCookie } from "cookies-next";
 import { GetServerSideProps } from "next";
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-  const isAuthenticated = hasCookie("session", { req, res });
-
-  if (isAuthenticated) {
-    return {
-      redirect: {
-        destination: "/profile",
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-      props: {
-        
-      },
-    };
-}
-
 export default function SignIn() {
 
   const router = useRouter();

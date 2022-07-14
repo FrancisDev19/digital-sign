@@ -13,18 +13,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       axios.get(`${BASEURL}sanctum/csrf-cookie`)
       .then(async () => {
         const {data} = await axios.post(
-          'https://d-signature-api.herokuapp.com/api/v1/auth/login',
+          `${BASEURL}api/v1/auth/login`,
           credentials,
         );
 
-        if(data.data){
+        if(data){
         const today = new Date();
         const expire = new Date();
         expire.setTime(today.getTime() + 3600000*24*14)
 
-        setCookie("session", data.data.token, {req, res, sameSite: true, expires: expire, maxAge: 3600, path: "/"});
+        setCookie("accessToken", data.data.token, {req, res, httpOnly: true, sameSite: 'strict', expires: expire, maxAge: 60 * 60, path: "/"});
 
-        res.status(200).json({message: "success"});
+        res.status(200).json({message: "login successfully"});
         }
       });
     } catch (error) {
